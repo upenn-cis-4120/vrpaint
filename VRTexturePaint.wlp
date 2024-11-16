@@ -1846,7 +1846,7 @@
                     "type": "paintManager",
                     "paintManager": {
                         "paintableMeshObject": "321",
-                        "playerObject": "17"
+                        "playerObject": "129"
                     }
                 }
             ],
@@ -3910,7 +3910,7 @@
             "version": [
                 1,
                 1,
-                6
+                2
             ]
         },
         "vr": {
