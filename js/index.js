@@ -24,6 +24,7 @@ import {VrModeActiveSwitch} from '@wonderlandengine/components';
 import {WasdControlsComponent} from '@wonderlandengine/components';
 import {ButtonComponent} from './button.js';
 import {ColorViewer} from './colorViewer.js';
+import {DynamicResize} from './dynamicResize.js';
 import {PaintManager} from './paintManager.js';
 /* wle:auto-imports:end */
 
@@ -31,17 +32,22 @@ import {loadRuntime} from '@wonderlandengine/api';
 import * as API from '@wonderlandengine/api'; // Deprecated: Backward compatibility.
 
 /* wle:auto-constants:start */
-const RuntimeOptions = {
-    physx: true,
-    loader: false,
-    xrFramebufferScaleFactor: 1,
-    canvas: 'canvas',
-};
 const Constants = {
     ProjectName: 'VRTexturePaint',
     RuntimeBaseName: 'WonderlandRuntime',
     WebXRRequiredFeatures: ['local',],
     WebXROptionalFeatures: ['local','local-floor','hand-tracking','hit-test',],
+};
+const RuntimeOptions = {
+    physx: true,
+    loader: false,
+    xrFramebufferScaleFactor: 1,
+    xrOfferSession: {
+        mode: 'auto',
+        features: Constants.WebXRRequiredFeatures,
+        optionalFeatures: Constants.WebXROptionalFeatures,
+    },
+    canvas: 'canvas',
 };
 /* wle:auto-constants:end */
 
@@ -95,6 +101,7 @@ engine.registerComponent(VrModeActiveSwitch);
 engine.registerComponent(WasdControlsComponent);
 engine.registerComponent(ButtonComponent);
 engine.registerComponent(ColorViewer);
+engine.registerComponent(DynamicResize);
 engine.registerComponent(PaintManager);
 /* wle:auto-register:end */
 

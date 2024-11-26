@@ -1,3 +1,4 @@
+import {vec3} from 'gl-matrix';
 import {Component, InputComponent, MeshComponent, Property, Texture} from '@wonderlandengine/api';
 import {CursorTarget, HowlerAudioSource} from '@wonderlandengine/components';
 import {PaintManager} from './paintManager.js';
@@ -95,7 +96,10 @@ export class ButtonComponent extends Component {
     /* Called by 'cursor-target' */
     onDown = (_, cursor) => {
         this.soundClick.play();
-        this.buttonMeshObject.translate([0.0, 0.0, -0.1]);
+        if (this.function_id != 14) {
+            this.buttonMeshObject.translate([0.0, 0.0, -0.1]);
+        }
+        console.log(cursor.cursorPos);
         hapticFeedback(cursor.object, 1.0, 20);
 
         switch (this.function_id) {
@@ -137,9 +141,67 @@ export class ButtonComponent extends Component {
                 break;
             case 13:
                 this.manager.switchSymmetry();
+                break;
+            case 14:
+                let n = vec3.create();
+                this.buttonMeshObject.getForward(n);
+                vec3.normalize(n, n)
+                let delta = vec3.create();
+                vec3.subtract(delta, cursor.cursorPos, this.returnPos);
+                let dot = vec3.dot(n, delta);
+                vec3.scale(n, n, dot)
+                let perp = vec3.create();
+                vec3.subtract(perp, delta, n);
+                vec3.normalize(n, n)
+
+                let right = vec3.create();
+                this.buttonMeshObject.getRight(right);
+                vec3.normalize(right, right);
+                let up = vec3.create();
+                vec3.cross(up, n, right);
+                vec3.normalize(up, up);
+
+                let perpNorm = vec3.create()
+                vec3.normalize(perpNorm, perp);
+                
+                let angle = Math.acos(vec3.dot(perpNorm, up));
+                if (vec3.dot(perpNorm, right) < 0) {
+                    angle *= -1;
+                    angle += 6.28;
+                }
+                console.log("angle:");
+                
+                //angle *= 180 / 3.14
+                angle /= 6.28;
+                // 0.4 is radius of thing
+                let color = this.HSVtoRGB(angle, vec3.length(perp) / 0.2, 1);
+                console.log(color);
+                this.manager.setColor(color);
+                break;
             default:
         };
 
+    }
+
+    HSVtoRGB(h, s, v) {
+        var r, g, b, i, f, p, q, t;
+        if (arguments.length === 1) {
+            s = h.s, v = h.v, h = h.h;
+        }
+        i = Math.floor(h * 6);
+        f = h * 6 - i;
+        p = v * (1 - s);
+        q = v * (1 - f * s);
+        t = v * (1 - (1 - f) * s);
+        switch (i % 6) {
+            case 0: r = v, g = t, b = p; break;
+            case 1: r = q, g = v, b = p; break;
+            case 2: r = p, g = v, b = t; break;
+            case 3: r = p, g = q, b = v; break;
+            case 4: r = t, g = p, b = v; break;
+            case 5: r = v, g = p, b = q; break;
+        }
+        return [r, g, b];
     }
 
     clamp(i, min, max) {

@@ -62,7 +62,22 @@ export class PaintManager extends Component {
         return texture;
     }
 
-    
+    multiplyQuaternions(q1, q2) {
+      // Extract the components of the first quaternion
+      const w1 = q1[0], x1 = q1[1], y1 = q1[2], z1 = q1[3];
+      
+      // Extract the components of the second quaternion
+      const w2 = q2[0], x2 = q2[1], y2 = q2[2], z2 = q2[3];
+      
+      // Perform quaternion multiplication
+      const w = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2;
+      const x = w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2;
+      const y = w1 * y2 - x1 * z2 + y1 * w2 + z1 * x2;
+      const z = w1 * z2 + x1 * y2 - y1 * x2 + z1 * w2;
+      
+      // Return the resulting quaternion as an array
+      return [w, x, y, z];
+  }
 
     init() {
         console.log('init() with param', this.param);
@@ -75,7 +90,12 @@ export class PaintManager extends Component {
         this.outputCanvas.width = this.canvas.width;
         this.outputCanvas.height = this.canvas.height;
 
+        this.outputCanvas2 = document.createElement('canvas');
+        this.outputCanvas2.width = this.canvas.width;
+        this.outputCanvas2.height = this.canvas.height;
+
         document.body.appendChild(this.outputCanvas);
+        document.body.appendChild(this.outputCanvas2);
         document.body.appendChild(this.canvas);
         //if (0){
         const gl = this.canvas.getContext('webgl2');
@@ -85,6 +105,7 @@ export class PaintManager extends Component {
         
         this.mesh = this.paintableMeshObject.getComponent(MeshComponent);
         this.imageData = new Uint8Array(this.canvas.width * this.canvas.height * 4); 
+        this.imageData2 = new Uint8Array(this.canvas.width * this.canvas.height * 4); 
         
       // MAIN SHADER PROGRAM
         //if (0) {
@@ -103,12 +124,6 @@ export class PaintManager extends Component {
 
       // Fragment shader source code
       const fsSource = `#version 300 es
-        uniform mediump vec3 paintPos;
-        uniform mediump vec3 prevPaintPos;
-        uniform lowp vec3 paintColor;
-        uniform mediump float radius;
-        uniform mediump float opacity;
-        uniform mediump int falloff;
 
         in mediump vec3 frag_worldPos;
         in mediump vec2 frag_uvPos;
@@ -116,46 +131,72 @@ export class PaintManager extends Component {
         out mediump vec4 fragColor;
         uniform sampler2D uTexture;
         uniform sampler2D uAlpha;
+        uniform sampler2D uHistory;
+
+        precision mediump float;
+        uniform float start;
+        uniform float end;
 
         void main() {
-          mediump float i = 0.5f;
-          mediump float factor = 0.0f;
-          while (i < 1.f) {
-            mediump float falloffFactor;
-            mediump float distance = length(frag_worldPos - mix(paintPos, prevPaintPos, i));
-            mediump float falloffDist = distance / radius;
-            if (falloffDist < 1.f) {
-              switch (falloff) {
-                case 0: // Constant
-                  falloffFactor = 1.f;
-                  break;
-                case 1: // Linear
-                  falloffFactor = 1.f - falloffDist;
-                  break;
-                case 2: // Quadratic
-                  falloffFactor = 1.f - falloffDist * falloffDist;
-                  break;
-                case 3: // Spheric
-                  falloffFactor = sqrt(1.f - falloffDist * falloffDist);
-                  break;
-                case 4: // Smooth
-                  falloffFactor = smoothstep(1.f, 0.f, falloffDist);
-                  break;
-                case 5: // Sharp
-                  falloffFactor = 2.f* smoothstep(1.f, 0.f, 0.5 * falloffDist + 0.5 );
-                  break;
-                default:
-                  falloffFactor = 1.f;
-              }
-              factor = max(factor, falloffFactor);
-            }
-            i += 1.f / 16.f;
+          float endA = end;
+          if (end < start) {
+            float endA = end + 256.0*64.0;
           }
-          factor = min(1.f, factor);
-          fragColor = mix(vec4(paintColor, 1.0), texture(uTexture, 0.5 * (frag_uvPos + vec2(1.0))), (1.f - factor * opacity));
-          //fragColor = distance <= radius ?
-          //  mix(vec4(paintColor, 1.0), texture(uTexture, 0.5 * (frag_uvPos + vec2(1.0))), (1.f - falloffFactor))
-          //  : texture(uTexture, 0.5 * (frag_uvPos + vec2(1.00)));
+          vec4 outColor = texture(uTexture, 0.5 * (frag_uvPos + vec2(1.0)));
+          for (float i = start; i < end; i += 1.0) {
+            // No need to mod as uv coords auto tile infinitely
+            vec2 historyCoords = vec2(fract(i * 4.0 / 256.0), fract((255.0 - floor(i/64.0)) / 256.0));
+            vec4 settings = texture(uHistory, historyCoords);
+            vec3 paintPos = settings.grb;
+            float radius = settings.a / 30.0;
+            vec3 paintColor = texture(uHistory, (historyCoords + vec2(1.0/256.0, 0.0))).rgb;
+            settings = texture(uHistory, (historyCoords + vec2(2.0/256.0, 0.0)));
+            vec3 prevPaintPos = settings.rbg;
+            float opacity = settings.a;
+            settings = texture(uHistory, (historyCoords + vec2(3.0/256.0, 0.0)));
+            int falloff = int(round(settings.r));
+
+            float delta = 1.0/16.0f;
+            float factor = 0.0f;
+            while (delta < 1.f) {
+              float falloffFactor;
+              float distance = length(frag_worldPos - mix(paintPos, prevPaintPos, delta));
+              float falloffDist = distance / radius;
+              if (falloffDist < 1.f) {
+                switch (falloff) {
+                  case 0: // Constant
+                    falloffFactor = 1.f;
+                    break;
+                  case 1: // Linear
+                    falloffFactor = 1.f - falloffDist;
+                    break;
+                  case 2: // Quadratic
+                    falloffFactor = 1.f - falloffDist * falloffDist;
+                    break;
+                  case 3: // Spheric
+                    falloffFactor = sqrt(1.f - falloffDist * falloffDist);
+                    break;
+                  case 4: // Smooth
+                    falloffFactor = smoothstep(1.f, 0.f, falloffDist);
+                    break;
+                  case 5: // Sharp
+                    falloffFactor = 2.f* smoothstep(1.f, 0.f, 0.5 * falloffDist + 0.5 );
+                    break;
+                  default:
+                    falloffFactor = 1.f;
+                }
+                factor = max(factor, falloffFactor);
+              }
+              delta += 1.f / 16.f;
+            }
+            factor = min(1.f, factor);
+            outColor = mix(vec4(paintColor, 1.0), outColor, (1.f - factor * opacity));
+            //fragColor = distance <= radius ?
+            //  mix(vec4(paintColor, 1.0), texture(uTexture, 0.5 * (frag_uvPos + vec2(1.0))), (1.f - falloffFactor))
+            //  : texture(uTexture, 0.5 * (frag_uvPos + vec2(1.00)));
+          }
+          fragColor = outColor;
+
         }
       `;
 
@@ -180,18 +221,28 @@ export class PaintManager extends Component {
           
           // Transform local pos to world pos
           pos = [pos[0], pos[1], pos[2], 1];
-          pos = this.paintableMeshObject.transformPointWorld(pos, pos);
+          //pos = this.paintableMeshObject.transformPointWorld(pos, pos);
           let out = [0.0, 0.0, 0.0];
           this.paintableMeshObject.getScalingWorld(out);
           const factor = out[0];
           pos[0] *= factor;
           pos[1] *= factor;
           pos[2] *= factor;
-          // TODO: ROTATION?
+          let quat = [0.0, 0.0, 0.0, 0.0];
+          this.paintableMeshObject.getRotationWorld(quat);
+          quat = [quat[3], quat[0], quat[1], quat[2]];
+          let vec = [0, pos[0], pos[1], pos[2]]
+          vec = this.multiplyQuaternions(quat, vec);
+          quat = [quat[0], -quat[1], -quat[2], -quat[3]];
+          vec = this.multiplyQuaternions(vec, quat);
+          pos[0] = vec[1];
+          pos[1] = vec[2];
+          pos[2] = vec[3];
           this.paintableMeshObject.getPositionWorld(out);
           pos[0] += out[0];
           pos[1] += out[1];
           pos[2] += out[2];
+          
           
           meshArr[5*i] = uv[0] * 2.0 - 1.0;
           // Inverted this after putImageData was added, as it flipped the data vertically
@@ -232,16 +283,12 @@ export class PaintManager extends Component {
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
 
-      this.paintPosAttr = gl.getUniformLocation(this.shaderProgram, "paintPos");
-      this.paintPrevPosAttr = gl.getUniformLocation(this.shaderProgram, "prevPaintPos");
-      this.paintColAttr = gl.getUniformLocation(this.shaderProgram, "paintColor");
       this.textureAttr = gl.getUniformLocation(this.shaderProgram, "uTexture");
-      this.radiusAttr = gl.getUniformLocation(this.shaderProgram, "radius");
-      this.opacityAttr = gl.getUniformLocation(this.shaderProgram, "opacity");
-      this.falloffAttr = gl.getUniformLocation(this.shaderProgram, "falloff");
       this.alphaAttr = gl.getUniformLocation(this.shaderProgram, "uAlpha");
-
-//}
+      this.historyAttr = gl.getUniformLocation(this.shaderProgram, "uHistory");
+      this.historyEndAttr = gl.getUniformLocation(this.shaderProgram, "end");
+      this.historyCheckpointAttr = gl.getUniformLocation(this.shaderProgram, "start");
+      //}
 
       //gl.uniform3f(this.paintPosAttr, 2.0, 3.0, 0.0);
       //gl.uniform3f(this.paintColAttr, 0.0, 1.0, 0.0);
@@ -414,11 +461,23 @@ export class PaintManager extends Component {
 
         // Settings
         this.radius = 0.03;
-        this.opacity = 0.15;
+        this.opacity = 1.0;
         this.falloff = 0;
         this.color = [1.0, 1.0, 1.0];
         this.useSymmetry = false;
         this.prevLoc = [-100.0, 0.0, 0.0]
+        
+        // Features: pos.xyz col.rgba, prevPos.xyz, rad, opac, falloff, alpha, sym
+        this.brushStrokeQueue = new Float32Array(15);
+        this.queueLength = 0;
+
+        this.history = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, this.history);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, 256, 256, 0, gl.RGBA, gl.FLOAT, null);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        this.historyEnd = 0;
+        this.historyCheckpoint = 0;
     }
 
     getColor() {
@@ -541,16 +600,31 @@ export class PaintManager extends Component {
     }
 
     paint(brushPos, prevLoc, color) {
-        const gl = this.canvas.getContext('webgl2');
+
+      const gl = this.canvas.getContext('webgl2');
+      
+      const brushSettings = new Float32Array([
+        brushPos[1], brushPos[0], brushPos[2], this.radius * 30,
+        this.color[0], this.color[1], this.color[2], 1.0,
+        prevLoc[0], prevLoc[2], prevLoc[1], this.opacity,
+        this.falloff, 0.0, 0.0, this.useSymmetry ? 1.0 : 0.0,
+      ]);
+      if (this.i % 1 == 0) {
+        gl.bindTexture(gl.TEXTURE_2D, this.history);
+        gl.texSubImage2D(gl.TEXTURE_2D, 0, (this.historyEnd % 64) * 4, 255.0 - (Math.floor(this.historyEnd / 64) % 256.0), 4, 1, gl.RGBA, gl.FLOAT, brushSettings);
+        this.historyEnd++;
+      }
+      if (this.i % 100 == 0) {
+        //this.historyEnd -= 20;
+        this.historyEnd = Math.max(this.historyEnd, 0);
+        console.log("undo test");
+        console.log(this.historyEnd);
+      }
 
         // SHADER PROGRAM DRAW CALL
         gl.useProgram(this.shaderProgram);
         // FLIP FBOs
-        [this.currTexture, this.nextTexture] = [this.nextTexture, this.currTexture]
-        var temp = this.currFramebuffer
-        this.currFramebuffer = this.nextFramebuffer
-        this.nextFramebuffer = temp
-        
+
         // Bind VAO
         gl.bindVertexArray(this.vaoMain);
         // Bind indices array again
@@ -562,21 +636,38 @@ export class PaintManager extends Component {
         gl.bindTexture(gl.TEXTURE_2D, this.currTexture);
         gl.uniform1i(this.textureAttr, 0);
 
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, this.history);
+        gl.uniform1i(this.historyAttr, 1);
 
-        gl.uniform3f(this.paintPosAttr, brushPos[0], brushPos[1], brushPos[2]);
-        gl.uniform3f(this.paintPrevPosAttr, prevLoc[0], prevLoc[1], prevLoc[2]);
+        gl.uniform1f(this.historyCheckpointAttr, this.historyCheckpoint);
+        gl.uniform1f(this.historyEndAttr, this.historyEnd);
+        if (this.i % 40 == 0) {
+          console.log(this.historyCheckpoint);
+          console.log(this.historyEnd)
+        }
+        // gl.uniform3f(this.paintPosAttr, brushPos[0], brushPos[1], brushPos[2]);
+        // gl.uniform3f(this.paintPrevPosAttr, prevLoc[0], prevLoc[1], prevLoc[2]);
 
-        gl.uniform1f(this.radiusAttr, this.radius);
-        gl.uniform1f(this.opacityAttr, this.opacity);
-        gl.uniform1i(this.falloffAttr, this.falloff);
+        // gl.uniform1f(this.radiusAttr, this.radius);
+        // gl.uniform1f(this.opacityAttr, this.opacity);
+        // gl.uniform1i(this.falloffAttr, this.falloff);
 
-        let colorA = this.HSVtoRGB((color % 360) / 360.0,  1.0, 1.0);
-        color > 0 ? gl.uniform3f(this.paintColAttr, this.color[0], this.color[1], this.color[2]) : gl.uniform3f(this.paintColAttr, 0.0, 0.0, 0.0);
+        // let colorA = this.HSVtoRGB((color % 360) / 360.0,  1.0, 1.0);
+        // color > 0 ? gl.uniform3f(this.paintColAttr, this.color[0], this.color[1], this.color[2]) : gl.uniform3f(this.paintColAttr, 0.0, 0.0, 0.0);
         //gl.clear(gl.COLOR_BUFFER_BIT);
         console.log("paint call called");
         
         gl.drawElements(gl.TRIANGLES, this.mesh.mesh.indexData.length, gl.UNSIGNED_INT, 0);
-        
+        if (this.i % 1 == 0) {
+          this.historyCheckpoint++;
+        }
+        [this.currTexture, this.nextTexture] = [this.nextTexture, this.currTexture]
+        var temp = this.currFramebuffer
+        this.currFramebuffer = this.nextFramebuffer
+        this.nextFramebuffer = temp
+        gl.readPixels(0, 0, this.canvas.width, this.canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, this.imageData);
+
         gl.bindVertexArray(null);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
         //gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -586,11 +677,11 @@ export class PaintManager extends Component {
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.postPBuffer);
 
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, this.nextTexture);
+        gl.bindTexture(gl.TEXTURE_2D, this.history);
         gl.uniform1i(this.postPTextureAttr, 0);
 
         gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, this.maskTexture);
+        gl.bindTexture(gl.TEXTURE_2D, this.currTexture);
         gl.uniform1i(this.postPMaskAttr, 1);
 
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -598,8 +689,7 @@ export class PaintManager extends Component {
         gl.bindVertexArray(null);
         //gl.bindBuffer(gl.PIXEL_PACK_BUFFER, this.pbo);
         //gl.readPixels(0, 0, this.canvas.width, this.canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, 0);
-
-        gl.readPixels(0, 0, this.canvas.width, this.canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, this.imageData);
+        gl.readPixels(0, 0, this.canvas.width, this.canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, this.imageData2);
 
         // 6. Insert a fence to synchronize operations
         //const fenceSync = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
@@ -623,6 +713,12 @@ export class PaintManager extends Component {
         // For some reason this process flips the image along the y-axis, so I have edited the vertex shader UVs
         const imageData = new ImageData(new Uint8ClampedArray(this.imageData), this.canvas.width, this.canvas.height);
         ctx.putImageData(imageData, 0, 0);
+
+        const ctx2 = this.outputCanvas2.getContext('2d');
+
+        // For some reason this process flips the image along the y-axis, so I have edited the vertex shader UVs
+        const imageData2 = new ImageData(new Uint8ClampedArray(this.imageData2), this.canvas.width, this.canvas.height);
+        ctx2.putImageData(imageData2, 0, 0);
         
         //ctx.fillStyle = 'red';
         //ctx.beginPath();

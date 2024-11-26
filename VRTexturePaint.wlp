@@ -1846,8 +1846,12 @@
                     "type": "paintManager",
                     "paintManager": {
                         "paintableMeshObject": "321",
-                        "playerObject": "129"
+                        "playerObject": "17"
                     }
+                },
+                {
+                    "type": "dynamicResize",
+                    "active": false
                 }
             ],
             "parent": "332",
@@ -2812,6 +2816,59 @@
                     }
                 }
             ]
+        },
+        "379": {
+            "link": {
+                "name": "TeleportIndicator",
+                "file": "models\\teleport-indicator.glb"
+            },
+            "components": [
+                {
+                    "mesh": {
+                        "mesh": "12",
+                        "material": "380"
+                    }
+                },
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "box": {
+                            "extents": [
+                                0.4,
+                                0.4,
+                                0.05
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "379",
+                        "hoverMaterial": "380",
+                        "paintableWrapper": "297",
+                        "function_id": 14
+                    }
+                }
+            ],
+            "translation": [
+                -1.4626781,
+                0.9955375,
+                0.6303427
+            ],
+            "rotation": [
+                0.0,
+                0.4999999,
+                3.484014499122168e-8,
+                0.8660254
+            ],
+            "scaling": [
+                0.4000002,
+                0.399999,
+                0.3999989
+            ],
+            "name": "ColorWheel"
         }
     },
     "meshes": {
@@ -3221,6 +3278,12 @@
                 "name": "UI_Panel.jpg",
                 "file": "models\\UI_Panel.jpg"
             }
+        },
+        "377": {
+            "link": {
+                "name": "512px-Color_circle_(RGB).png",
+                "file": "models\\512px-Color_circle_(RGB).png"
+            }
         }
     },
     "images": {
@@ -3310,6 +3373,12 @@
             "link": {
                 "name": "UI_Panel.jpg",
                 "file": "models\\UI_Panel.jpg"
+            }
+        },
+        "376": {
+            "link": {
+                "name": "512px-Color_circle_(RGB).png",
+                "file": "models\\512px-Color_circle_(RGB).png"
             }
         }
     },
@@ -3678,6 +3747,43 @@
             "Flat": {
                 "flatTexture": "374"
             }
+        },
+        "380": {
+            "link": {
+                "name": "Material.001",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "pipeline": "35",
+            "Phong": {
+                "ambientColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "diffuseColor": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "emissiveColor": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0
+                ],
+                "diffuseTexture": "377"
+            },
+            "Flat": {
+                "flatTexture": "377",
+                "color": [
+                    1.0,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
         }
     },
     "shaders": {
@@ -3910,7 +4016,7 @@
             "version": [
                 1,
                 1,
-                2
+                6
             ]
         },
         "vr": {
@@ -4247,6 +4353,10 @@
         },
         "375": {
             "fileName": "models/UI_Panel.jpg",
+            "importerName": ""
+        },
+        "378": {
+            "fileName": "models/512px-Color_circle_(RGB).png",
             "importerName": ""
         }
     },
