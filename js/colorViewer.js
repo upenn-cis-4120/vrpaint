@@ -24,6 +24,6 @@ export class ColorViewer extends Component {
 
     update(dt) {
         const c = this.manager.getColor();
-        this.material.diffuseColor = [c[0], c[1], c[2], 1.0];
+        this.material.color = [c[0], c[1], c[2], 1.0];
     }
 }

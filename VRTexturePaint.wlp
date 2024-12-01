@@ -1846,7 +1846,7 @@
                     "type": "paintManager",
                     "paintManager": {
                         "paintableMeshObject": "321",
-                        "playerObject": "17"
+                        "playerObject": "129"
                     }
                 },
                 {
@@ -2786,22 +2786,22 @@
                 "name": "UI_Slider.002",
                 "file": "models\\UI_Panel.fbx"
             },
-            "parent": "352",
+            "parent": "379",
             "translation": [
-                0.0082174,
-                0.1555819,
-                -0.0005534
+                0.0221502,
+                -1.1906794,
+                0.0528695
             ],
             "rotation": [
-                -0.0,
-                0.0,
-                0.0,
-                1.0
+                1.463768057874404e-7,
+                1.0,
+                0.0000013,
+                7.549803626716312e-8
             ],
             "scaling": [
-                0.1594288,
-                0.110269,
-                0.1594288
+                0.129137,
+                0.1288772,
+                0.1291327
             ],
             "components": [
                 {
@@ -2835,9 +2835,9 @@
                         "collider": "box",
                         "box": {
                             "extents": [
-                                0.4,
-                                0.4,
-                                0.05
+                                0.1599999,
+                                0.1599999,
+                                0.0199999
                             ]
                         }
                     }
@@ -2853,22 +2853,976 @@
                 }
             ],
             "translation": [
-                -1.4626781,
-                0.9955375,
-                0.6303427
+                0.3605911,
+                -0.0666143,
+                -0.3743653
+            ],
+            "rotation": [
+                -0.7071065,
+                1.0350428425454083e-7,
+                1.0350333923270227e-7,
+                0.7071069
+            ],
+            "scaling": [
+                0.16,
+                0.1599995,
+                0.1599995
+            ],
+            "name": "ColorWheel",
+            "parent": "130"
+        },
+        "382": {
+            "link": {
+                "name": "UI_Slider.001",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "352",
+            "translation": [
+                0.0095276,
+                0.1646232,
+                -0.0006427
             ],
             "rotation": [
                 0.0,
-                0.4999999,
-                3.484014499122168e-8,
-                0.8660254
+                0.0,
+                0.0,
+                1.0
             ],
             "scaling": [
-                0.4000002,
-                0.399999,
-                0.3999989
+                0.158,
+                0.1,
+                0.1589999
             ],
-            "name": "ColorWheel"
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "box": {
+                            "extents": [
+                                0.0599999,
+                                0.0149999,
+                                0.0049999
+                            ]
+                        }
+                    },
+                    "active": false
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "366",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 13
+                    }
+                }
+            ]
+        },
+        "383": {
+            "link": {
+                "name": "UI_Border",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "translation": [
+                -0.4429073,
+                -0.0582268,
+                -0.6081712
+            ],
+            "rotation": [
+                0.0,
+                0.9440389,
+                0.0,
+                -0.3298339
+            ],
+            "scaling": [
+                0.1295997,
+                0.1869999,
+                0.1295949
+            ],
+            "components": [
+                {
+                    "mesh": {
+                        "material": "328"
+                    }
+                }
+            ],
+            "parent": "19"
+        },
+        "384": {
+            "link": {
+                "name": "UI_PlusButton",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                -0.655444,
+                0.7854735,
+                1.949847217019851e-7
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.1594288,
+                0.110269,
+                0.1594288
+            ],
+            "components": [
+                null,
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "353",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 1
+                    }
+                },
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "aabb",
+                        "aabb": {
+                            "extents": [
+                                0.0219998,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "385": {
+            "link": {
+                "name": "UI_LargeButton",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                -0.6184383,
+                -0.2592366,
+                -4.468066450158403e-8
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.2271829,
+                0.1571312,
+                0.2271829
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "aabb",
+                        "aabb": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "354",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 11
+                    }
+                }
+            ]
+        },
+        "386": {
+            "link": {
+                "name": "UI_Slider",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.0082173,
+                0.785474,
+                0.0000059
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.1594288,
+                0.110269,
+                0.1594288
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "box": {
+                            "extents": [
+                                0.0599999,
+                                0.0179999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "355",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 13
+                    }
+                }
+            ]
+        },
+        "387": {
+            "link": {
+                "name": "UI_PlusButton.001",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                -0.655444,
+                0.4723093,
+                8.140474250240004e-8
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.1594288,
+                0.110269,
+                0.1594288
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "aabb",
+                        "aabb": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "356",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 3
+                    }
+                }
+            ]
+        },
+        "388": {
+            "link": {
+                "name": "UI_PlusButton.002",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                -0.655444,
+                0.1591449,
+                2.7429383209209852e-8
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.1594288,
+                0.110269,
+                0.1594288
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "box": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "357",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 5
+                    }
+                }
+            ]
+        },
+        "389": {
+            "link": {
+                "name": "UI_PlusButton.003",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.6554439,
+                0.7854737,
+                1.353800911374492e-7
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.1594288,
+                0.110269,
+                0.1594288
+            ],
+            "components": [
+                null,
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "358",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 2
+                    }
+                },
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "aabb",
+                        "aabb": {
+                            "extents": [
+                                0.0219998,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "390": {
+            "link": {
+                "name": "UI_PlusButton.004",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.6554439,
+                0.4723093,
+                8.140474250240004e-8
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.1594288,
+                0.110269,
+                0.1594288
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "aabb",
+                        "aabb": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "359",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 4
+                    }
+                }
+            ]
+        },
+        "391": {
+            "link": {
+                "name": "UI_PlusButton.005",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.6554439,
+                0.1591449,
+                2.7429390314637203e-8
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.1594288,
+                0.110269,
+                0.1594288
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "box": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "360",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 6
+                    }
+                }
+            ]
+        },
+        "392": {
+            "link": {
+                "name": "UI_LargeButton.001",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.0027757,
+                -0.2592366,
+                -4.468066450158403e-8
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.2271829,
+                0.1571312,
+                0.2271829
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "aabb",
+                        "aabb": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "361",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 9
+                    }
+                }
+            ]
+        },
+        "393": {
+            "link": {
+                "name": "UI_LargeButton.002",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.6239901,
+                -0.2592366,
+                -4.468066450158403e-8
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.2271829,
+                0.1571312,
+                0.2271829
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "aabb",
+                        "aabb": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "362",
+                        "paintableWrapper": "297",
+                        "function_id": 7,
+                        "hoverMaterial": "333"
+                    }
+                }
+            ]
+        },
+        "394": {
+            "link": {
+                "name": "UI_LargeButton.003",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                -0.6184383,
+                -0.6866336,
+                -1.1834453772507917e-7
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.2271829,
+                0.1571312,
+                0.2271829
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "box": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "363",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 12
+                    }
+                }
+            ]
+        },
+        "395": {
+            "link": {
+                "name": "UI_LargeButton.004",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.0027757,
+                -0.6866336,
+                -1.1834453772507917e-7
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.2271829,
+                0.1571312,
+                0.2271829
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "aabb": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                1.0
+                            ]
+                        },
+                        "box": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "364",
+                        "hoverMaterial": "333",
+                        "function_id": 10,
+                        "paintableWrapper": "297"
+                    }
+                }
+            ]
+        },
+        "396": {
+            "link": {
+                "name": "UI_LargeButton.005",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.6239901,
+                -0.6866336,
+                -1.1834453772507917e-7
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.2271829,
+                0.1571312,
+                0.2271829
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "aabb": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        },
+                        "box": {
+                            "extents": [
+                                0.0219999,
+                                0.0219999,
+                                0.0049999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "365",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 8
+                    }
+                }
+            ]
+        },
+        "397": {
+            "link": {
+                "name": "UI_Slider.001",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.0082174,
+                0.4705276,
+                -0.0005534
+            ],
+            "rotation": [
+                -0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.1594288,
+                0.110269,
+                0.1594288
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "box": {
+                            "extents": [
+                                0.0599999,
+                                0.0149999,
+                                0.0049999
+                            ]
+                        }
+                    },
+                    "active": false
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "366",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 13
+                    }
+                }
+            ]
+        },
+        "398": {
+            "link": {
+                "name": "UI_Slider.001",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "383",
+            "translation": [
+                0.0095276,
+                0.1646232,
+                -0.0006427
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "scaling": [
+                0.158,
+                0.1,
+                0.1589999
+            ],
+            "components": [
+                null,
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "box": {
+                            "extents": [
+                                0.0599999,
+                                0.0149999,
+                                0.0049999
+                            ]
+                        }
+                    },
+                    "active": false
+                },
+                {
+                    "type": "cursor-target"
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "366",
+                        "hoverMaterial": "333",
+                        "paintableWrapper": "297",
+                        "function_id": 13
+                    }
+                }
+            ]
+        },
+        "399": {
+            "link": {
+                "name": "TeleportIndicator",
+                "file": "models\\teleport-indicator.glb"
+            },
+            "components": [
+                {
+                    "mesh": {
+                        "mesh": "12",
+                        "material": "380"
+                    }
+                },
+                {
+                    "type": "collision",
+                    "collision": {
+                        "collider": "box",
+                        "box": {
+                            "extents": [
+                                0.1599999,
+                                0.1599999,
+                                0.0199999
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "button",
+                    "button": {
+                        "buttonMeshObject": "399",
+                        "hoverMaterial": "380",
+                        "paintableWrapper": "297",
+                        "function_id": 14
+                    }
+                }
+            ],
+            "translation": [
+                0.3165637,
+                -0.0666136,
+                -0.7257381
+            ],
+            "rotation": [
+                2.8666175921898684e-7,
+                -0.2734819,
+                2.959841083338688e-7,
+                0.9618771
+            ],
+            "scaling": [
+                0.1599999,
+                0.1599995,
+                0.1599995
+            ],
+            "name": "ColorWheel",
+            "parent": "19"
+        },
+        "400": {
+            "link": {
+                "name": "UI_Slider.002",
+                "file": "models\\UI_Panel.fbx"
+            },
+            "parent": "399",
+            "translation": [
+                0.0221502,
+                -1.1906794,
+                0.0528695
+            ],
+            "rotation": [
+                1.463768057874404e-7,
+                1.0,
+                0.0000013,
+                7.549803626716313e-8
+            ],
+            "scaling": [
+                0.129137,
+                0.1288772,
+                0.1291327
+            ],
+            "components": [
+                {
+                    "mesh": {
+                        "material": "328"
+                    }
+                },
+                {
+                    "type": "colorViewer",
+                    "colorViewer": {
+                        "paintableWrapper": "297"
+                    }
+                }
+            ]
         }
     },
     "meshes": {
@@ -4016,7 +4970,7 @@
             "version": [
                 1,
                 1,
-                6
+                2
             ]
         },
         "vr": {

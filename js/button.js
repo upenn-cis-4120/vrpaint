@@ -147,7 +147,9 @@ export class ButtonComponent extends Component {
                 this.buttonMeshObject.getForward(n);
                 vec3.normalize(n, n)
                 let delta = vec3.create();
-                vec3.subtract(delta, cursor.cursorPos, this.returnPos);
+                let pos = vec3.create()
+                this.buttonMeshObject.getTranslationWorld(pos);
+                vec3.subtract(delta, cursor.cursorPos, pos);
                 let dot = vec3.dot(n, delta);
                 vec3.scale(n, n, dot)
                 let perp = vec3.create();
@@ -174,7 +176,7 @@ export class ButtonComponent extends Component {
                 //angle *= 180 / 3.14
                 angle /= 6.28;
                 // 0.4 is radius of thing
-                let color = this.HSVtoRGB(angle, vec3.length(perp) / 0.2, 1);
+                let color = this.HSVtoRGB(angle, vec3.length(perp) / 0.16, 1);
                 console.log(color);
                 this.manager.setColor(color);
                 break;
